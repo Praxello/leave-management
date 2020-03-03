@@ -112,46 +112,14 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
+
+
                 <LinearLayout
-                    android:id="@+id/ll_logout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/blue700"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/margin10"
-                            android:background="@drawable/ic_logout"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:gravity="center" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/logout"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!--<LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/ll_myscore"
+                    android:id="@+id/ll_all_in_one_social"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -163,10 +131,10 @@
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="@dimen/margin80"
                             android:layout_margin="@dimen/margin10"
                             android:gravity="center"
-                            android:src="@drawable/ic_scoreboard" />
+                            android:src="@drawable/unnamed" />
 
                     </LinearLayout>
 
@@ -174,13 +142,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/leave_balance"
+                        android:text="@string/allinonesocialmedia"
                         android:textStyle="bold"
                         android:textColor="@color/black"/>
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -221,6 +189,40 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/blue700"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/margin10"
+                            android:background="@drawable/ic_logout"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:gravity="center" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/logout"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <!--<LinearLayout
                     android:layout_width="match_parent"

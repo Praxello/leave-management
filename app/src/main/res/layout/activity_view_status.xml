@@ -11,6 +11,22 @@
         layout="@layout/toolbar"
         android:id="@+id/toolbar_view_status"/>
 
+    <LinearLayout
+        android:id="@+id/ll_spin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rectangle_border"
+        android:layout_margin="@dimen/margin10"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/spin_list_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

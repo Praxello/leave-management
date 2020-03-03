@@ -4,7 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -12,6 +17,9 @@ import android.widget.Toast;
 import com.praxello.leavemanagement.AllKeys;
 import com.praxello.leavemanagement.CommonMethods;
 import com.praxello.leavemanagement.R;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +32,8 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
     LinearLayout llViewRequest;
     @BindView(R.id.ll_logout)
     LinearLayout llLogOut;
+    @BindView(R.id.ll_all_in_one_social)
+    LinearLayout llAllInOneSocial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +43,33 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
 
         //basic intialisation....
         initViews();
+
+        //print key Hash
+        //printKeyHash();
     }
 
     private void initViews(){
         llApplyLeave.setOnClickListener(this);
         llViewRequest.setOnClickListener(this);
         llLogOut.setOnClickListener(this);
+        llAllInOneSocial.setOnClickListener(this);
     }
 
+    private void printKeyHash(){
+        try {
+            PackageInfo info=getPackageManager().getPackageInfo("com.praxello.leavemanagement", PackageManager.GET_SIGNATURES);
+
+            for(Signature signature:info.signatures){
+                MessageDigest md=MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("key", "printKeyHash: "+ Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -53,6 +82,14 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.ll_view_request:
                 intent = new Intent(DashBoardActivity.this,ViewRequestActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("type","user");
+                startActivity(intent);
+                overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
+                break;
+
+            case R.id.ll_all_in_one_social:
+                intent = new Intent(DashBoardActivity.this,AllInOneSocialActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("type","user");
                 startActivity(intent);

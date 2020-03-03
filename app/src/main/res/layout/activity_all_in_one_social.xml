@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AllInOneSocialActivity">
+
+    <include
+        android:id="@+id/toolbar_all_in_one"
+        layout="@layout/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSocialMedia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin10" />
+
+    <LinearLayout
+        android:id="@+id/llbottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin1"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginRight="@dimen/margin5"
+            android:layout_weight="1"
+            android:text="@string/camera"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin1"
+            android:layout_marginLeft="@dimen/margin5"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_weight="1"
+            android:text="@string/gallery"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivimage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin300"
+        android:layout_marginLeft="@dimen/margin20"
+        android:layout_marginTop="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin20"
+        android:scaleType="fitCenter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin1"
+            android:layout_marginLeft="@dimen/margin5"
+            android:layout_marginTop="@dimen/margin10"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/post"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">LeaveManagement</string>
+    <string name="facebook_app_id">2269108476725268</string>
+    <string name="facebook_login_protocol_scheme">fb2269108476725268</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot password ?</string>
@@ -14,6 +16,10 @@
     <string name="submit">Submit</string>
     <string name="leave_reason_type">Leave type</string>
     <string name="logout">Logout</string>
-    <string name="approved">Approved</string>
+    <string name="approved">Approve</string>
     <string name="reject">Reject</string>
+    <string name="allinonesocialmedia">All in one social media</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="post">Post</string>
 </resources>

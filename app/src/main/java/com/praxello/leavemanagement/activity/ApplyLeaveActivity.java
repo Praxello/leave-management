@@ -106,7 +106,7 @@ public class ApplyLeaveActivity extends AppCompatActivity implements View.OnClic
 
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+               // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
                 break;
 
@@ -123,13 +123,12 @@ public class ApplyLeaveActivity extends AppCompatActivity implements View.OnClic
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                view.setMinDate(System.currentTimeMillis() - 1000);
 
                                 etEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
 
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+               // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
 
                 break;
