@@ -3,6 +3,7 @@ package com.praxello.leavemanagement.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -86,6 +87,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         params.put("usrname", etMobileNumber.getText().toString());
         params.put("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
         params.put("passwrd", etPassword.getText().toString());*/
+        final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
+        progress.setMessage("Logging you...");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+        progress.setCancelable(false);
 
         smartQuiz.getApiRequestHelper().login(etMobileNumber.getText().toString(), Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID),
                 etPassword.getText().toString(),new ApiRequestHelper.OnRequestComplete() {
@@ -97,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Log.e(TAG, "onSuccess: "+loginResponse.getMessage());
                         Log.e(TAG, "onSuccess: "+loginResponse.getData());
 
+                        progress.dismiss();
                         if(loginResponse.getResponsecode()==200){
 
                             CommonMethods.setPreference(LoginActivity.this, AllKeys.USER_ID, loginResponse.getData().getUserId());
@@ -137,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onFailure(String apiResponse) {
+                        progress.dismiss();
                         Toast.makeText(LoginActivity.this, apiResponse, Toast.LENGTH_SHORT).show();
                     }
                 });

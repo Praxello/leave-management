@@ -32,8 +32,6 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
     LinearLayout llViewRequest;
     @BindView(R.id.ll_logout)
     LinearLayout llLogOut;
-    @BindView(R.id.ll_all_in_one_social)
-    LinearLayout llAllInOneSocial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,6 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
         llApplyLeave.setOnClickListener(this);
         llViewRequest.setOnClickListener(this);
         llLogOut.setOnClickListener(this);
-        llAllInOneSocial.setOnClickListener(this);
     }
 
     private void printKeyHash(){
@@ -88,13 +85,13 @@ public class DashBoardActivity extends AppCompatActivity implements View.OnClick
                 overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
                 break;
 
-            case R.id.ll_all_in_one_social:
+           /* case R.id.ll_all_in_one_social:
                 intent = new Intent(DashBoardActivity.this,AllInOneSocialActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("type","user");
                 startActivity(intent);
                 overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
-                break;
+                break;*/
 
             case R.id.ll_logout:
                 new android.app.AlertDialog.Builder(DashBoardActivity.this)

@@ -22,4 +22,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="post">Post</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="update">Update</string>
 </resources>

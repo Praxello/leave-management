@@ -1,6 +1,9 @@
 package com.praxello.leavemanagement.model.viewstatus;
 
-public class ViewStatusData {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ViewStatusData implements Parcelable {
     private int leave_id;
     private int user_id;
     private String leave_request;
@@ -28,6 +31,33 @@ public class ViewStatusData {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    protected ViewStatusData(Parcel in) {
+        leave_id = in.readInt();
+        user_id = in.readInt();
+        leave_request = in.readString();
+        leave_type = in.readString();
+        leave_reason = in.readString();
+        start_date = in.readString();
+        end_date = in.readString();
+        leave_status = in.readString();
+        afname = in.readString();
+        alname = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+    }
+
+    public static final Creator<ViewStatusData> CREATOR = new Creator<ViewStatusData>() {
+        @Override
+        public ViewStatusData createFromParcel(Parcel in) {
+            return new ViewStatusData(in);
+        }
+
+        @Override
+        public ViewStatusData[] newArray(int size) {
+            return new ViewStatusData[size];
+        }
+    };
 
     public String getAfname() {
         return afname;
@@ -123,5 +153,26 @@ public class ViewStatusData {
 
     public void setLeave_status(String leave_status) {
         this.leave_status = leave_status;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(leave_id);
+        dest.writeInt(user_id);
+        dest.writeString(leave_request);
+        dest.writeString(leave_type);
+        dest.writeString(leave_reason);
+        dest.writeString(start_date);
+        dest.writeString(end_date);
+        dest.writeString(leave_status);
+        dest.writeString(afname);
+        dest.writeString(alname);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
     }
 }

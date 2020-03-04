@@ -27,7 +27,7 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.praxello.leavemanagement.widgets.slidingitemrecyclerview.SlidingItemMenuRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rvViewStatus"/>

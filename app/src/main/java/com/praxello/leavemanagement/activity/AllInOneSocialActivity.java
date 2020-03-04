@@ -6,7 +6,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,39 +14,40 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.facebook.share.widget.ShareDialog;
 import com.praxello.leavemanagement.R;
 import com.praxello.leavemanagement.adapter.SocialMediaAdapter;
 import com.praxello.leavemanagement.model.SocialMediaData;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.facebook.FacebookSdk;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AllInOneSocialActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.rvSocialMedia)
     RecyclerView rvSocialMedia;
-    ArrayList<SocialMediaData> socialMediaDataArrayList=new ArrayList<>();
+    ArrayList<SocialMediaData> socialMediaDataArrayList = new ArrayList<>();
     @BindView(R.id.btn_camera)
     AppCompatButton btnCamera;
     @BindView(R.id.btn_gallery)
@@ -60,6 +60,9 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
     CallbackManager callbackManager;
     ShareDialog shareDialog;
     Bitmap bitmap;
+    private static final String EMAIL = "email";
+    public LoginManager loginManager;
+    private static String TAG = "AllInOneSocialActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +78,12 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
         loadData();
 
         //initFb...
-        callbackManager=CallbackManager.Factory.create();
-        shareDialog=new ShareDialog(this);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(AllInOneSocialActivity.this);
     }
 
-    private void initViews(){
-        Toolbar toolbar=findViewById(R.id.toolbar_all_in_one);
+    private void initViews() {
+        Toolbar toolbar = findViewById(R.id.toolbar_all_in_one);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -95,18 +98,18 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
         rvSocialMedia.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
-    private void loadData(){
-        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_facebook,"FaceBook"));
-       //socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_gmail,"Gmail"));
-        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_instagram_sketched,"Instagram"));
-        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_twitter,"Twitter"));
+    private void loadData() {
+        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_facebook, "FaceBook"));
+        //socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_gmail,"Gmail"));
+        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_instagram_sketched, "Instagram"));
+        socialMediaDataArrayList.add(new SocialMediaData(R.drawable.ic_twitter, "Twitter"));
 
-        rvSocialMedia.setAdapter(new SocialMediaAdapter(AllInOneSocialActivity.this,socialMediaDataArrayList));
+        rvSocialMedia.setAdapter(new SocialMediaAdapter(AllInOneSocialActivity.this, socialMediaDataArrayList));
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_camera:
                 takePhotoFromCamera();
                 break;
@@ -118,10 +121,9 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
             case R.id.btn_post:
                 Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
                 //fb post
-                shareFaceBookPost();
+                //shareFaceBookPost();
                 break;
         }
-
     }
 
     public void choosePhotoFromGallary() {
@@ -138,6 +140,7 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CANCELED) {
             return;
@@ -150,14 +153,14 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                     //String path = saveImage(bitmap);
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG,50,out);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
 
                     byte[] byteArray = out.toByteArray();
-                    bitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                    bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                     ivImage.setImageBitmap(bitmap);
                     //ivProfilePic.setImageBitmap(compressedBitmap);
 
-                  //  selectedImagePath =  getRealPathFromURIForGallery(contentURI);
+                    //  selectedImagePath =  getRealPathFromURIForGallery(contentURI);
                     //etMediaLink.setText(selectedImagePath);
 
                     //Toast.makeText(DashBoardActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
@@ -172,19 +175,19 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
-            bitmap= BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+            bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
             ivImage.setImageBitmap(bitmap);
 
-            byte[] byteArray = out .toByteArray();
+            byte[] byteArray = out.toByteArray();
 
             // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
             //Uri tempUri = getImageUri(AddNewQuestionActivity.this, thumbnail);
 
             // CALL THIS METHOD TO GET THE ACTUAL PATH
-           // File finalFile = new File(getRealPathFromURI(tempUri));
-           // imageBase64String = Base64.encodeToString(byteArray, Base64.DEFAULT);
-           // selectedImagePath=finalFile.getAbsolutePath();
-           // etMediaLink.setText(selectedImagePath);
+            // File finalFile = new File(getRealPathFromURI(tempUri));
+            // imageBase64String = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            // selectedImagePath=finalFile.getAbsolutePath();
+            // etMediaLink.setText(selectedImagePath);
 
             //uploadImageRetrofit(finalFile.getAbsolutePath());
 
@@ -195,13 +198,13 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
     }
 
     //Facebook SHaring
-    public void shareFaceBookPost(){
-        SharePhoto sharePhoto=new SharePhoto.Builder()
+   /* public void shareFaceBookPost() {
+        SharePhoto sharePhoto = new SharePhoto.Builder()
                 .setBitmap(bitmap)
                 .build();
 
-        if(ShareDialog.canShow(SharePhotoContent.class)){
-            SharePhotoContent content=new SharePhotoContent.Builder()
+        if (ShareDialog.canShow(SharePhotoContent.class)) {
+            SharePhotoContent content = new SharePhotoContent.Builder()
                     .addPhoto(sharePhoto)
                     .build();
 
@@ -225,10 +228,68 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
             });
 
         }
+    }*/
+
+    public void adapterClickEvents(int position) {
+        switch (position) {
+            case 0://FaceBookLogin...
+                loginWithFaceBook();
+                break;
+        }
     }
+
+    private void loginWithFaceBook() {
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+
+                        Log.i("LoginActivity", response.toString());
+                        try {
+                            String id = object.getString("id");
+                            Toast.makeText(AllInOneSocialActivity.this, "facebookid"+id, Toast.LENGTH_SHORT).show();
+                            try {
+                                URL profile_pic = new URL("http://graph.facebook.com/" + id + "/picture?type=large");
+                                Log.i("profile_pic", profile_pic + "");
+
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String gender = object.getString("gender");
+                            String birthday = object.getString("birthday");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields",
+                        "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(AllInOneSocialActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(AllInOneSocialActivity.this, "" + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
@@ -242,6 +303,4 @@ public class AllInOneSocialActivity extends AppCompatActivity implements View.On
         super.onBackPressed();
         overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
     }
-
-
 }

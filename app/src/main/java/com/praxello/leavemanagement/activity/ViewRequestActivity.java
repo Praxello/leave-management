@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -30,6 +31,7 @@ import com.praxello.leavemanagement.model.viewstatus.ViewStatusData;
 import com.praxello.leavemanagement.model.viewstatus.ViewStatusResponse;
 import com.praxello.leavemanagement.services.ApiRequestHelper;
 import com.praxello.leavemanagement.services.SmartQuiz;
+import com.praxello.leavemanagement.widgets.slidingitemrecyclerview.SlidingItemMenuRecyclerView;
 
 import java.util.ArrayList;
 
@@ -39,17 +41,18 @@ import butterknife.ButterKnife;
 public class ViewRequestActivity extends AppCompatActivity {
 
     @BindView(R.id.rvViewStatus)
-    RecyclerView rvViewStatus;
+    SlidingItemMenuRecyclerView rvViewStatus;
     public  static SmartQuiz smartQuiz;
     private static String TAG="ViewRequestActivity";
     @BindView(R.id.ll_spin)
     LinearLayout llSpin;
     @BindView(R.id.spin_list_type)
     Spinner spinListType;
-    ArrayList<ViewStatusData> viewStatusDataArrayList=new ArrayList<>();
+    public static ArrayList<ViewStatusData> viewStatusDataArrayList=new ArrayList<>();
     ArrayList<ViewStatusData> pendingArrayList=new ArrayList<>();
     ArrayList<ViewStatusData> approvedArrayList=new ArrayList<>();
     ArrayList<ViewStatusData> rejectArrayList=new ArrayList<>();
+    static ViewRequestAdapter viewRequestAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +123,11 @@ public class ViewRequestActivity extends AppCompatActivity {
     }
 
     private void loadData(){
+        final ProgressDialog progress = new ProgressDialog(ViewRequestActivity.this);
+        progress.setMessage("Please wait...");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+        progress.setCancelable(false);
         smartQuiz.getApiRequestHelper().getAllLeaveDetails(CommonMethods.getPrefrence(ViewRequestActivity.this,AllKeys.USER_ID),new ApiRequestHelper.OnRequestComplete() {
                     @Override
                     public void onSuccess(Object object) {
@@ -128,7 +136,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                         //Log.e(TAG, "onSuccess: "+viewStatusResponse.getResponsecode());
                         Log.e(TAG, "onSuccess: "+viewStatusResponse.getMessage());
                         //Log.e(TAG, "onSuccess: "+viewStatusResponse.getData());
-
+                        progress.dismiss();
                         if(viewStatusResponse.getResponsecode()==200){
                             if(viewStatusResponse.getData()!=null){
                                 viewStatusDataArrayList=viewStatusResponse.getData();
@@ -147,7 +155,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                                     }
                                 }
                                 if(getIntent().getStringExtra("type").equals("user")){
-                                    ViewRequestAdapter viewRequestAdapter=new ViewRequestAdapter(viewStatusResponse.getData(),ViewRequestActivity.this);
+                                    viewRequestAdapter=new ViewRequestAdapter(viewStatusDataArrayList,ViewRequestActivity.this);
                                     rvViewStatus.setAdapter(viewRequestAdapter);
                                 }else if(getIntent().getStringExtra("type").equals("admin")){
                                     AdminViewRequestAdapter adminViewRequestAdapter=new AdminViewRequestAdapter(viewStatusResponse.getData(),ViewRequestActivity.this);
@@ -162,6 +170,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String apiResponse) {
+                        progress.dismiss();
                         Toast.makeText(ViewRequestActivity.this, apiResponse, Toast.LENGTH_SHORT).show();
                     }
                 });

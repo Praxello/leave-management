@@ -45,10 +45,9 @@ public class SocialMediaAdapter extends RecyclerView.Adapter<SocialMediaAdapter.
         holder.llSocialMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (position){
-                    case 0:
-                       // AllInOneSocialActivity.shareFaceBookPost();
-                }
+
+                ((AllInOneSocialActivity) context).adapterClickEvents(position);
+
             }
         });
     }

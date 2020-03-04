@@ -80,8 +80,18 @@ public class ApiRequestHelper {
         call_api_add_leave_request(onRequestComplete, call);
     }
 
+    public void deleteLeaveRequest(Map<String, String> params, final OnRequestComplete onRequestComplete) {
+        Call<CommonResponse> call = SmartQuizServices.deleteLeaveRequest(params);
+        call_api_add_leave_request(onRequestComplete, call);
+    }
+
     public void updateStatus(Map<String, String> params, final OnRequestComplete onRequestComplete) {
         Call<ViewStatusResponseAdmin> call = SmartQuizServices.updateStatus(params);
+        call_api_update_leave_details(onRequestComplete, call);
+    }
+
+    public void updateLeave(Map<String, String> params, final OnRequestComplete onRequestComplete) {
+        Call<ViewStatusResponseAdmin> call = SmartQuizServices.updateLeave(params);
         call_api_update_leave_details(onRequestComplete, call);
     }
 
